@@ -1,32 +1,37 @@
+'''
+This file contains the resampling techniques used in the experiments.
+resampling_techniques is a dictionary that contains the resampling techniques used with default weight (50:50 after resampling).
+create_resamplers is a function that adjusts resampling techniques to achieve a specified percentage of the minority class after resampling
+'''
+
 from imblearn.over_sampling import RandomOverSampler, SMOTE, BorderlineSMOTE, ADASYN
 from imblearn.under_sampling import RandomUnderSampler, AllKNN, CondensedNearestNeighbour, EditedNearestNeighbours, RepeatedEditedNearestNeighbours, TomekLinks, InstanceHardnessThreshold, NearMiss, OneSidedSelection
 from imblearn.combine import SMOTEENN, SMOTETomek
 from imblearn.under_sampling import NeighbourhoodCleaningRule
-import numpy as np
 
 resampling_techniques = {
-        # "Base": None,
-        # "RO": RandomOverSampler(random_state=0),
-        # "SM": SMOTE(random_state=0),
-        # "BS": BorderlineSMOTE(random_state=0),
-        # "AD": ADASYN(random_state=0),
-        # "RU": RandomUnderSampler(random_state=0),
+        "Base": None,
+        "RO": RandomOverSampler(random_state=0),
+        "SM": SMOTE(random_state=0),
+        "BS": BorderlineSMOTE(random_state=0),
+        "AD": ADASYN(random_state=0),
+        "RU": RandomUnderSampler(random_state=0),
         "NM": NearMiss(version=1),
-        # "CN": CondensedNearestNeighbour(random_state=0),
-        # "AL": AllKNN(),
-        # "EN": EditedNearestNeighbours(),
-        # "RE": RepeatedEditedNearestNeighbours(),
+        "CN": CondensedNearestNeighbour(random_state=0),
+        "AL": AllKNN(),
+        "EN": EditedNearestNeighbours(),
+        "RE": RepeatedEditedNearestNeighbours(),
         "TM": TomekLinks(),
-        # "IH": InstanceHardnessThreshold(random_state=0),
+        "IH": InstanceHardnessThreshold(random_state=0),
         "OS": OneSidedSelection(random_state=0),
-        # "NC": NeighbourhoodCleaningRule(),
-        # "SE": SMOTEENN(random_state=0),
-        # "ST": SMOTETomek(random_state=0),
+        "NC": NeighbourhoodCleaningRule(),
+        "SE": SMOTEENN(random_state=0),
+        "ST": SMOTETomek(random_state=0),
     }
 
 def create_resamplers(weight, total_majority, total_minority):
     """
-    Adjusts resamplers to achieve a specified percentage of the minority class after resampling,
+    Adjusts resampling techniques to achieve a specified percentage of the minority class after resampling,
     ensuring that the calculated sample targets are integers.
 
     :param weight: Target percentage of the minority class after resampling.
