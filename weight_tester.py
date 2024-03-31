@@ -1,18 +1,21 @@
+'''
+This file checks the influence of weights in resampling techniques on the performance of the model.
+It creates bump charts to visualize the performance of the model with different weights.
+'''
+
+import logging
+import time
+
 import numpy as np
 import pandas as pd
-import time
-import logging
-
+from sklearn.metrics import roc_auc_score, recall_score, f1_score, precision_score
+from sklearn.model_selection import StratifiedKFold
 from xgboost import XGBClassifier
-from sklearn.preprocessing import LabelEncoder, MinMaxScaler, MultiLabelBinarizer, OneHotEncoder, LabelEncoder, StandardScaler
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split, StratifiedKFold
-from sklearn.metrics import classification_report,  roc_auc_score, accuracy_score, recall_score, f1_score, precision_score
 
-from resampling_and_classification import resampling_techniques, create_resamplers
-from Preprocess_dataframe import preprocess_data, reshape_case, prefix_selection, encoding, add_label
-from evaluation_metrics import calculate_averaged_results, write_data_to_excel, create_excel_report
-from visualization import create_bar_charts, plot_distribution, create_bump_chart
+from Preprocess_dataframe import prefix_selection, encoding, add_label
+from resampling_and_classification import create_resamplers
+from visualization import create_bump_chart
+
 np.set_printoptions(precision=10)
 
 
@@ -22,15 +25,14 @@ if __name__ == "__main__":
     logging.info(f"Preprocessing starts.")
 
     # Load dataframe
-    data_path = 'data/bpic2012_O_DECLINED-COMPLETE.csv' # sepsis_cases_2.csv bpic2012_O_DECLINED-COMPLETE.csv
+    data_path = 'data/bpic2012_O_DECLINED-COMPLETE.csv' # options: sepsis_cases_1.csv, sepsis_cases_2.csv, bpic2012_O_DECLINED-COMPLETE.csv
     df = pd.read_csv(data_path, sep=';')
 
     # Prefix selection
     n = 7
     encoded_df = prefix_selection(df, n)
 
-    # Encoding, available options: agg, static
-    dataset_name = "BPIC2012"
+    dataset_name = "BPIC2012" # options: Sepsis 1, Sepsis 2, BPIC2012
     transformed_df = encoding(encoded_df, encoding_method="agg", dataset=dataset_name)
 
     # add label to each case
