@@ -1,3 +1,13 @@
+'''
+This file contains the visualization functions used in the experiments.
+It contains the following functions:
+1. create_bar_charts: Create separate bar charts for each metric: Precision, Recall, F1-Score, Accuracy, AUC
+    for both labels '0' (regular) and '1' (deviant), and a separate chart for mean training time.
+    Different background colors are used for baseline, oversampling, undersampling and hybrid sampling methods.
+2. plot_distribution: plot distribution of a column in a DataFrame.
+3. create_bump_chart: Create a bump chart to visualize the rank of each resampling techniques.
+'''
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -7,7 +17,7 @@ from config import timestr, general_output_folder
 from warnings import simplefilter
 simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
 
-
+# Create bar charts for each metric and each label
 def create_bar_charts(results, accuracys, AUCs, time_report_all, dataset_name):
     """
     Create separate bar charts for each metric: Precision, Recall, F1-Score, Accuracy, AUC
@@ -94,7 +104,7 @@ def create_bar_charts(results, accuracys, AUCs, time_report_all, dataset_name):
 
             # Adding custom legends outside the plot
             plt.legend(handles=legend_patches, loc='upper left', bbox_to_anchor=(1, 0.5), fontsize=12)
-            plt.subplots_adjust(right=0.8)  # Adjust subplot to fit legend
+            plt.subplots_adjust(right=0.8)
             plt.savefig(os.path.join(output_folder, f"{metric}_Label_{label}_{dataset_name}.png"))
             plt.close()
 
@@ -117,7 +127,7 @@ def create_bar_charts(results, accuracys, AUCs, time_report_all, dataset_name):
     for i, (method, time) in enumerate(mean_training_time.items()):
         plt.annotate(f"{time:.2f}",
                      xy=(i, time),
-                     xytext=(0, 5),  # 5 points vertical offset
+                     xytext=(0, 5),
                      textcoords="offset points",
                      ha='center', va='bottom', fontsize=12, color='black')
 
@@ -125,6 +135,7 @@ def create_bar_charts(results, accuracys, AUCs, time_report_all, dataset_name):
     plt.close()
 
 
+# Function to plot distribution of a column in a DataFrame, currently used for plotting the distribution of Activity
 def plot_distribution(dfs, columns_to_plot, resampler_name, dataset_name):
     # If dfs is a single DataFrame, wrap it in a list
     if not isinstance(dfs, list):
@@ -138,7 +149,7 @@ def plot_distribution(dfs, columns_to_plot, resampler_name, dataset_name):
     if not isinstance(resampler_name, str) or not isinstance(dataset_name, str):
         raise ValueError("resampler_name and dataset_name must be strings.")
 
-    output_folder = f"D:/SS2023/MasterThesis/code/visulization_plot/{timestr}-{dataset_name}"
+    output_folder = general_output_folder + f"visualization_plot/{timestr}-{dataset_name}"
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
@@ -149,16 +160,14 @@ def plot_distribution(dfs, columns_to_plot, resampler_name, dataset_name):
         if col not in combined_df.columns:
             combined_df[col] = 0
 
-    # Calculate the proportion of 1s (or 0s for missing columns) in activity columns for each label
+    # Calculate the proportion of 1s in activity columns for each label
     proportions = {col: combined_df.groupby('label')[col].mean() for col in columns_to_plot}
 
     # Preparing data for plotting
     plot_data = pd.DataFrame(proportions)
 
-    # Set up the figure before plotting
-    plt.figure(figsize=(13, 6))
-
     # Plotting
+    plt.figure(figsize=(13, 6))
     n_cols = len(columns_to_plot)
     index = np.arange(n_cols)
     bar_width = 0.35
@@ -187,6 +196,8 @@ def plot_distribution(dfs, columns_to_plot, resampler_name, dataset_name):
     plt.savefig(os.path.join(output_folder, f"{resampler_name}_activity_distribution.png"))
     plt.close()
 
+
+# Function to create a bump chart of the metrics scores
 def create_bump_chart(metrics_name, metrics_scores, dataset_name):
     df = pd.DataFrame(metrics_scores).T  # Transpose: weights become rows, resamplers become columns
     ranks = df.rank(axis=1, method='min', ascending=False, na_option='bottom')
@@ -205,9 +216,9 @@ def create_bump_chart(metrics_name, metrics_scores, dataset_name):
     plt.gca().invert_yaxis()
     plt.legend(title="Resampler", bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.tight_layout()
-    # timestr = datetime.now().strftime("%Y%m%d-%H%M%S")
-    # output_folder = f"./visualization_plots/{timestr}-{dataset_name}"
-    # os.makedirs(output_folder, exist_ok=True)
-    # plt.savefig(os.path.join(output_folder, f"{dataset_name}_F1_Scores_Weight_Influence.png"))
+
+    output_folder = general_output_folder + f"visualization_plot/{timestr}-{dataset_name}-bump_chart"
+    os.makedirs(output_folder, exist_ok=True)
+    plt.savefig(os.path.join(output_folder, f"{dataset_name}_F1_Scores_Weight_Influence.png"))
     plt.show()
     plt.close()
