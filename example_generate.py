@@ -1,50 +1,44 @@
-import numpy as np
+'''
+This file generated examples of resampling-techniques-generated data
+It uses an example dataset with 5 cases of label 1 and 10 cases of label 0.
+The output is an excel file with the resampled data for each resampling technique.
+Note: the generated data is not the original data, but prefix selected and aggregated data which is used in training.
+'''
+
 import pandas as pd
-import time
-import logging
+from Preprocess_dataframe import prefix_selection, encoding, add_label
+from resampling_and_classification import resampling_techniques
+from config import general_output_folder
+import os
 
-from xgboost import XGBClassifier
-from sklearn.preprocessing import LabelEncoder, MinMaxScaler, MultiLabelBinarizer, OneHotEncoder, LabelEncoder, StandardScaler
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split, StratifiedKFold
-from sklearn.metrics import classification_report,  roc_auc_score, accuracy_score, recall_score
-
-from resampling_and_classification import resampling_techniques, create_resamplers
-from Preprocess_dataframe import preprocess_data, reshape_case, prefix_selection, encoding, add_label
-from evaluation_metrics import calculate_averaged_results, write_data_to_excel, create_excel_report
-from visualization import create_bar_charts, plot_distribution, create_bump_chart
-pd.set_option('display.max_rows', None)
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_colwidth', None)
 
 data_path = 'data/sepsis_cases_1.csv' # options: sepsis_cases_1.csv, sepsis_cases_2.csv, bpic2012_O_DECLINED-COMPLETE.csv
 df = pd.read_csv(data_path, sep=';')
-
 filtered_df = df.groupby('Case ID').filter(lambda x: len(x) == 8)
 
 # Prefix selection
 n = 7
 encoded_df = prefix_selection(df, n)
+encoded_df = encoded_df # it can changed to encoded_df[["Activity", "timesincelastevent", "Case ID"]] for easier understanding
 
-encoded_df = encoded_df # [["Activity", "timesincelastevent", "Case ID"]]
-
+# Encoding
 dataset_name = "Sepsis 1" # options: Sepsis 1, Sepsis 2, BPIC2012
 transformed_df = encoding(encoded_df, encoding_method="agg", dataset=dataset_name)
-
-# [["Activity", "timesincelastevent", "Case ID"]]
 transformed_df = add_label(df, transformed_df)
 
+# Select 5 cases of label 1 and 10 cases of label 0
 top_5_label_1 = transformed_df[transformed_df['label'] == 1].head(6)
 top_10_label_0 = transformed_df[transformed_df['label'] == 0].head(12)
 selected_rows = pd.concat([top_5_label_1, top_10_label_0])
 
-print(selected_rows)
-print("1")
-
 X_train = selected_rows.drop('label', axis=1)
 y_train = selected_rows['label']
 
-output_path = 'D:/SS2023/MasterThesis/code/example_generate.xlsx'
+# Output the example resampled data
+output_path = general_output_folder + 'example_generated_data/example_generated.xlsx'
+if not os.path.exists(general_output_folder + 'example_generated_data'):
+    os.makedirs(general_output_folder + 'example_generated_data')
+
 with pd.ExcelWriter(output_path, engine='openpyxl') as writer:
     for resampler_name, resampler in resampling_techniques.items():
         sheet_name = resampler_name
