@@ -1,3 +1,8 @@
+'''
+This file contains the global variables for the project.
+'''
+
+
 from datetime import datetime
 import time
 
