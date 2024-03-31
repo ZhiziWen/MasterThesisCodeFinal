@@ -1,5 +1,11 @@
 '''
 This file compares the distribution of the two Sepsis dataset to ensure that the datasets are similarly distributed.
+
+The following tests are done:
+1. Mann-Whitney U test for all columns
+2. Chi-square test for categorical columns
+3. Mode comparison for all columns
+
 '''
 
 
@@ -75,7 +81,7 @@ print("............Chi-square test results............")
 for column, results in chi_square_results.items():
     print(f"Column: {column}, Results: {results}")
 
-# Calculate the mode for common categorical columns in both filtered datasets
+# Mode Comparison
 mode_comparison_results = {}
 
 for column in num_cols + cat_cols:
