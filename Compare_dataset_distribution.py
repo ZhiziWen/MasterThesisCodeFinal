@@ -33,7 +33,7 @@ cat_cols = ["Activity", 'org:group', 'Diagnose', 'DiagnosticArtAstrup', 'Diagnos
 num_cols = ['CRP', 'LacticAcid', 'Leucocytes', "hour", "weekday", "month", "timesincemidnight",
             "timesincelastevent", "timesincecasestart", "event_nr", "open_cases", 'Age']
 
-# ------Perform Mann-Whitney U test on all columns------
+# ------1. Mann-Whitney U test for all columns------
 mw_test_results = {}
 for column in num_cols + cat_cols:  # Combine lists for iteration
     if column in filtered_dataset1.columns and column in filtered_dataset2.columns:
@@ -61,7 +61,7 @@ print("............Mann-Whitney U test results............")
 for column, results in mw_test_results.items():
     print(f"Column: {column}, Results: {results}")
 
-# ------Perform Chi-square test on categorical columns------
+# ------2. Chi-square test for categorical columns------
 filtered_dataset1['Dataset'] = 'Dataset1'
 filtered_dataset2['Dataset'] = 'Dataset2'
 combined_dataset = pd.concat([filtered_dataset1, filtered_dataset2])
@@ -79,7 +79,7 @@ print("............Chi-square test results............")
 for column, results in chi_square_results.items():
     print(f"Column: {column}, Results: {results}")
 
-# ------Mode Comparison------
+# ------3. Mode comparison for all columns------
 mode_comparison_results = {}
 
 for column in num_cols + cat_cols:
