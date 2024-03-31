@@ -1,3 +1,10 @@
+'''
+This file contains the AggregateTransformer class which is used to aggregate the data based on the case id column.
+The code used in this file is modified from the code in the following link:
+https://github.com/irhete/predictive-monitoring-benchmark
+'''
+
+
 from sklearn.base import TransformerMixin
 import pandas as pd
 import numpy as np
