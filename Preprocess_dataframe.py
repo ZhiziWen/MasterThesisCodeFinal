@@ -1,43 +1,8 @@
-import pandas as pd
-from sklearn.preprocessing import OneHotEncoder, MinMaxScaler
+'''
+This file contains the data preprocessing functions used in the experiments.
+'''
+
 from AggregateTransformer import AggregateTransformer
-from StaticTransformer import StaticTransformer
-
-
-def preprocess_data(df, time_column):
-    df['label'] = df['label'].map({'regular': 0, 'deviant': 1})
-
-    ohe = OneHotEncoder(sparse=False)
-    activities_encoded = ohe.fit_transform(df[['Activity']])
-    activities_df = pd.DataFrame(activities_encoded, columns=[f'ACT_{col.split("_")[-1]}' for col in ohe.get_feature_names_out(['Activity'])])
-
-    encoded_df = pd.concat([df[['Case ID', 'timesincelastevent']], activities_df], axis=1)
-    scaler = MinMaxScaler()
-    encoded_df['timesincelastevent'] = scaler.fit_transform(encoded_df[['timesincelastevent']])
-
-    # Sorting the data by Case ID and timestamp to ensure correct sequence
-    encoded_df = encoded_df.join(df[time_column])
-    encoded_df.sort_values(by=['Case ID', time_column], inplace=True)
-    encoded_df.drop(columns=[time_column], inplace=True)
-
-    return encoded_df
-
-
-def reshape_case(df):
-    # Creating column names
-    col_names = []
-    for i in range(len(df)):
-        col_names.append(f'timesincelastevent_{i+1}')
-        col_names.extend([f'ACT_{i+1}_{col}' for col in df.columns[2:]])
-
-    # Reshape the dataframe
-    reshaped_values = []
-    for _, row in df.iterrows():
-        reshaped_values.extend(row[1:].tolist())  # Append activity columns and timesincelastevent for each event
-
-    reshaped_df = pd.DataFrame([reshaped_values], columns=col_names)
-
-    return reshaped_df
 
 
 def prefix_selection(df, n):
@@ -45,8 +10,7 @@ def prefix_selection(df, n):
     return filtered_df.groupby("Case ID").apply(lambda x: x.head(n)).reset_index(drop=True)
 
 
-def encoding(df, encoding_method="agg", dataset="sepsis"):
-
+def encoding(df, dataset="sepsis"):
     # Aggregation encoding
     if "Sepsis" in dataset:
         dynamic_cat_cols = ["Activity", 'org:group']  # i.e. event attributes
@@ -73,17 +37,14 @@ def encoding(df, encoding_method="agg", dataset="sepsis"):
     cat_cols = dynamic_cat_cols + static_cat_cols
     num_cols = dynamic_num_cols + static_num_cols
 
-    if encoding_method == "agg":
-        transformer = AggregateTransformer(case_id_col='Case ID', cat_cols=cat_cols, num_cols=num_cols, boolean=True,
-                                           fillna=True)
-    if encoding_method == "static":
-        transformer = StaticTransformer(case_id_col='Case ID', cat_cols=cat_cols, num_cols=num_cols,
-                                           fillna=True)
+    transformer = AggregateTransformer(case_id_col='Case ID', cat_cols=cat_cols, num_cols=num_cols, boolean=True,
+                                       fillna=True)
 
     transformer.fit(df)
     transformed_df = transformer.transform(df)
 
     return transformed_df
+
 
 def add_label(original_df, transformed_df):
     unique_case_ids = transformed_df.index.unique()

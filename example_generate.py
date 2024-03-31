@@ -23,7 +23,7 @@ encoded_df = encoded_df # it can changed to encoded_df[["Activity", "timesincela
 
 # Encoding
 dataset_name = "Sepsis 1" # options: Sepsis 1, Sepsis 2, BPIC2012
-transformed_df = encoding(encoded_df, encoding_method="agg", dataset=dataset_name)
+transformed_df = encoding(encoded_df, dataset=dataset_name)
 transformed_df = add_label(df, transformed_df)
 
 # Select 5 cases of label 1 and 10 cases of label 0

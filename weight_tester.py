@@ -33,7 +33,7 @@ if __name__ == "__main__":
     encoded_df = prefix_selection(df, n)
 
     dataset_name = "BPIC2012" # options: Sepsis 1, Sepsis 2, BPIC2012
-    transformed_df = encoding(encoded_df, encoding_method="agg", dataset=dataset_name)
+    transformed_df = encoding(encoded_df, dataset=dataset_name)
 
     # add label to each case
     transformed_df = add_label(df, transformed_df)
