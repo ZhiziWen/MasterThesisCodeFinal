@@ -33,10 +33,8 @@ cat_cols = ["Activity", 'org:group', 'Diagnose', 'DiagnosticArtAstrup', 'Diagnos
 num_cols = ['CRP', 'LacticAcid', 'Leucocytes', "hour", "weekday", "month", "timesincemidnight",
             "timesincelastevent", "timesincecasestart", "event_nr", "open_cases", 'Age']
 
-# Dictionary to store Mann-Whitney U test results
+# ------Perform Mann-Whitney U test on all columns------
 mw_test_results = {}
-
-# Perform Mann-Whitney U test on numerical columns
 for column in num_cols + cat_cols:  # Combine lists for iteration
     if column in filtered_dataset1.columns and column in filtered_dataset2.columns:
         # Comparison for numerical columns
@@ -63,7 +61,7 @@ print("............Mann-Whitney U test results............")
 for column, results in mw_test_results.items():
     print(f"Column: {column}, Results: {results}")
 
-# Perform Chi-square test on categorical columns
+# ------Perform Chi-square test on categorical columns------
 filtered_dataset1['Dataset'] = 'Dataset1'
 filtered_dataset2['Dataset'] = 'Dataset2'
 combined_dataset = pd.concat([filtered_dataset1, filtered_dataset2])
@@ -81,14 +79,13 @@ print("............Chi-square test results............")
 for column, results in chi_square_results.items():
     print(f"Column: {column}, Results: {results}")
 
-# Mode Comparison
+# ------Mode Comparison------
 mode_comparison_results = {}
 
 for column in num_cols + cat_cols:
     mode_dataset1 = filtered_dataset1[column].mode().iloc[0] if not filtered_dataset1[column].mode().empty else "No mode found"
     mode_dataset2 = filtered_dataset2[column].mode().iloc[0] if not filtered_dataset2[column].mode().empty else "No mode found"
 
-    # Compare modes between the two datasets
     mode_comparison_results[column] = {'Dataset 1 Mode': mode_dataset1, 'Dataset 2 Mode': mode_dataset2,
                                        'Modes are equal': mode_dataset1 == mode_dataset2}
 
