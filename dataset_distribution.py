@@ -1,80 +1,91 @@
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy.stats import ks_2samp
+'''
+This file compares the distribution of the two Sepsis dataset to ensure that the datasets are similarly distributed.
+'''
+
+
+from Preprocess_dataframe import prefix_selection
+from scipy.stats import mannwhitneyu
 import pandas as pd
 from scipy.stats import chi2_contingency
-from Preprocess_dataframe import preprocess_data, reshape_case, prefix_selection, encoding, add_label
-from scipy.stats import f_oneway
 
-data_path = 'data/sepsis_cases_1.csv'
-df = pd.read_csv(data_path, sep=';')
-n = 7
-encoded_df = prefix_selection(df, n)
-dataset_name = "sepsis 4"  # options: sepsis, bpic
-df1 = encoding(encoded_df, encoding_method="agg", dataset=dataset_name)
+# Load dataframe
+data_path1 = 'data/sepsis_cases_1.csv'
+data_path2 = 'data/sepsis_cases_2.csv'
+dataset1 = pd.read_csv(data_path1, sep=';')
+dataset2 = pd.read_csv(data_path2, sep=';')
 
-data_path = 'data/sepsis_cases_2.csv'
-df = pd.read_csv(data_path, sep=';')
-n = 7
-encoded_df = prefix_selection(df, n)
-dataset_name = "sepsis 4"  # options: sepsis, bpic
-df2 = encoding(encoded_df, encoding_method="agg", dataset=dataset_name)
+n_value = 7
+filtered_dataset1 = prefix_selection(dataset1, n_value)
+filtered_dataset2 = prefix_selection(dataset2, n_value)
 
-data_path = 'data/sepsis_cases_4.csv'
-df = pd.read_csv(data_path, sep=';')
-n = 7
-encoded_df = prefix_selection(df, n)
-dataset_name = "sepsis 4"  # options: sepsis, bpic
-df3 = encoding(encoded_df, encoding_method="agg", dataset=dataset_name)
+cat_cols = ["Activity", 'org:group', 'Diagnose', 'DiagnosticArtAstrup', 'DiagnosticBlood', 'DiagnosticECG',
+            'DiagnosticIC', 'DiagnosticLacticAcid', 'DiagnosticLiquor', 'DiagnosticOther', 'DiagnosticSputum',
+            'DiagnosticUrinaryCulture', 'DiagnosticUrinarySediment', 'DiagnosticXthorax', 'DisfuncOrg',
+            'Hypotensie', 'Hypoxie', 'InfectionSuspected', 'Infusion', 'Oligurie', 'SIRSCritHeartRate',
+            'SIRSCritLeucos', 'SIRSCritTachypnea', 'SIRSCritTemperature', 'SIRSCriteria2OrMore']
 
+num_cols = ['CRP', 'LacticAcid', 'Leucocytes', "hour", "weekday", "month", "timesincemidnight",
+            "timesincelastevent", "timesincecasestart", "event_nr", "open_cases", 'Age']
 
-df1['Dataset'] = 'df1'
-df2['Dataset'] = 'df2'
-df3['Dataset'] = 'df3'
-combined_df = pd.concat([df1, df2, df3], ignore_index=True)
+# Dictionary to store Mann-Whitney U test results
+mw_test_results = {}
 
-# Filter out non-Activity columns if necessary
-activity_columns = [col for col in combined_df.columns if col.startswith('Activity')]
-# Ensure to include the Dataset column for identification
-activity_columns.append('Dataset')
+# Perform Mann-Whitney U test on numerical columns
+for column in num_cols + cat_cols:  # Combine lists for iteration
+    if column in filtered_dataset1.columns and column in filtered_dataset2.columns:
+        # Comparison for numerical columns
+        if column in num_cols:
+            data1 = filtered_dataset1[column].dropna()
+            data2 = filtered_dataset2[column].dropna()
+            if len(data1.unique()) > 1 and len(data2.unique()) > 1:
+                stat, p = mannwhitneyu(data1, data2)
+                mw_test_results[column] = {'Mann-Whitney Statistic': stat, 'p-value': p}
+            else:
+                mw_test_results[column] = "Insufficient unique values for meaningful comparison"
+        # Comparison for categorical columns
+        elif column in cat_cols:
+            counts_1 = filtered_dataset1[column].value_counts(normalize=True)
+            counts_2 = filtered_dataset2[column].value_counts(normalize=True)
+            common_categories = list(set(counts_1.index) & set(counts_2.index))
+            if common_categories and not counts_1[common_categories].equals(counts_2[common_categories]):
+                stat, p = mannwhitneyu(counts_1[common_categories], counts_2[common_categories])
+                mw_test_results[column] = {'Mann-Whitney Statistic': stat, 'p-value': p}
+            else:
+                mw_test_results[column] = "Cannot perform Mann-Whitney U test due to identical values or empty data"
 
-# Step 2: Reshape to long format
-melted_df = combined_df.melt(id_vars=['Dataset'], value_vars=activity_columns, var_name='Activity', value_name='Value')
+print("............Mann-Whitney U test results............")
+for column, results in mw_test_results.items():
+    print(f"Column: {column}, Results: {results}")
 
-# Optional Step: Clean up the Activity column to remove the "Activity_" prefix
-melted_df['Activity'] = melted_df['Activity'].str.replace('Activity_', '')
+# Perform Chi-square test on categorical columns
+filtered_dataset1['Dataset'] = 'Dataset1'
+filtered_dataset2['Dataset'] = 'Dataset2'
+combined_dataset = pd.concat([filtered_dataset1, filtered_dataset2])
 
-# Group by Activity and Dataset, then describe each group
-summary_stats = melted_df.groupby(['Activity', 'Dataset'])['Value'].describe()
-print(summary_stats)
+chi_square_results = {}
+for column in cat_cols:
+    if column in combined_dataset.columns:
+        contingency_table = pd.crosstab(combined_dataset[column], combined_dataset['Dataset'])
+        chi2, p, dof, expected = chi2_contingency(contingency_table)
+        chi_square_results[column] = {'Chi-square Statistic': chi2, 'p-value': p, 'Degrees of Freedom': dof}
+    else:
+        chi_square_results[column] = "Column not in datasets"
 
-import seaborn as sns
-import matplotlib.pyplot as plt
+print("............Chi-square test results............")
+for column, results in chi_square_results.items():
+    print(f"Column: {column}, Results: {results}")
 
-# Box plot for comparing distributions
-plt.figure(figsize=(10, 6))
-sns.boxplot(x='Activity', y='Value', hue='Dataset', data=melted_df)
-plt.title('Activity Distribution Across Datasets')
-plt.xticks(rotation=45)  # Rotate activity names for better readability
-plt.show()
+# Calculate the mode for common categorical columns in both filtered datasets
+mode_comparison_results = {}
 
+for column in num_cols + cat_cols:
+    mode_dataset1 = filtered_dataset1[column].mode().iloc[0] if not filtered_dataset1[column].mode().empty else "No mode found"
+    mode_dataset2 = filtered_dataset2[column].mode().iloc[0] if not filtered_dataset2[column].mode().empty else "No mode found"
 
-plt.figure(figsize=(10, 6))
-sns.violinplot(x='Activity', y='Value', hue='Dataset', data=melted_df, split=True)
-plt.title('Activity Distribution Across Datasets')
-plt.xticks(rotation=45)
-plt.show()
+    # Compare modes between the two datasets
+    mode_comparison_results[column] = {'Dataset 1 Mode': mode_dataset1, 'Dataset 2 Mode': mode_dataset2,
+                                       'Modes are equal': mode_dataset1 == mode_dataset2}
 
-
-
-# Assuming 'Activity1', 'Activity2', 'Activity3' are your activities of interest
-# And you have two datasets 'df1' and 'df2'
-activity_groups = melted_df[melted_df['Dataset'].isin(['df1', 'df2'])].groupby(['Activity', 'Dataset'])
-
-anova_results = f_oneway(activity_groups.get_group(('Activity_Admission IC', 'df1'))['Value'],
-                         activity_groups.get_group(('Activity_Admission IC', 'df2'))['Value'],
-                         activity_groups.get_group(('Activity_Admission NC', 'df1'))['Value'],
-                         activity_groups.get_group(('Activity_Admission NC', 'df2'))['Value'],
-                         # Add more groups as needed
-                        )
-print(f"ANOVA F-statistic: {anova_results.statistic}, P-value: {anova_results.pvalue}")
+print("............Mode comparison results............")
+for column, results in mode_comparison_results.items():
+    print(f"Column: {column}, Results: {results}")
