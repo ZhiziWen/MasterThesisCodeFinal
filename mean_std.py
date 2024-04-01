@@ -3,7 +3,7 @@ This file calculates the mean and standard deviation of the metrics in the metri
 """
 
 import pandas as pd
-from config import timestr, project_folder
+from global_variables import timestr, project_folder
 
 # Load the dataset
 file_path = project_folder + 'metrics_report/report_Sepsis 1_20240331-2356.xlsx'

@@ -8,7 +8,7 @@ Note: the generated data is not the original data, but prefix selected and aggre
 import pandas as pd
 from Preprocess_dataframe import prefix_selection, encoding, add_label
 from resampling_and_classification import resampling_techniques
-from config import project_folder
+from global_variables import project_folder
 import os
 
 

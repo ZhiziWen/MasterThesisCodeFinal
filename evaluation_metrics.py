@@ -3,7 +3,7 @@ This file calculates the evaluation metrics used in the experiments and save it 
 """
 
 import pandas as pd
-from config import timestr, project_folder
+from global_variables import timestr, project_folder
 
 def create_excel_report(results, accuracys, AUCs, time_report_all, filename='output_metrics.xlsx'):
     """

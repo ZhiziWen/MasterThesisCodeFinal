@@ -7,7 +7,7 @@ If the Friedman test shows that there is a difference, the perform_posthoc_test 
 import pandas as pd
 from scipy.stats import friedmanchisquare
 import scikit_posthocs as sp
-from config import project_folder
+from global_variables import project_folder
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_colwidth', None)
