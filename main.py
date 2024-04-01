@@ -108,7 +108,7 @@ if __name__ == "__main__":
             accuracy.append(accuracy_score(y_test, y_pred))
             AUC.append(roc_auc_score(y_test, model.predict_proba(X_test)[:, 1]))
 
-        plot_distribution(resampled_dfs, activity_columns, resampler_name, dataset_name)
+        # plot_distribution(resampled_dfs, activity_columns, resampler_name, dataset_name) # use this code to see the distribution of the resampled data
         results[resampler_name], accuracys[resampler_name], AUCs[resampler_name], time_report_all[resampler_name] = reports, accuracy, AUC, time_report
 
     create_excel_report(results, accuracys, AUCs, time_report_all, f'report_{dataset_name}')
