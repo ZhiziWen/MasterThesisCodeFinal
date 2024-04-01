@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np
 import os
-from config import timestr, general_output_folder
+from config import timestr, project_folder
 from warnings import simplefilter
 simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
 
@@ -31,7 +31,7 @@ def create_bar_charts(results, accuracys, AUCs, time_report_all, dataset_name):
     :param dataset_name: Name of the dataset used for analysis.
     """
 
-    output_folder = general_output_folder + f"visualization_plot/{timestr}-{dataset_name}"
+    output_folder = project_folder + f"visualization_plot/{timestr}-{dataset_name}"
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
@@ -149,7 +149,7 @@ def plot_distribution(dfs, columns_to_plot, resampler_name, dataset_name):
     if not isinstance(resampler_name, str) or not isinstance(dataset_name, str):
         raise ValueError("resampler_name and dataset_name must be strings.")
 
-    output_folder = general_output_folder + f"visualization_plot/{timestr}-{dataset_name}"
+    output_folder = project_folder + f"visualization_plot/{timestr}-{dataset_name}"
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
@@ -217,7 +217,7 @@ def create_bump_chart(metrics_name, metrics_scores, dataset_name):
     plt.legend(title="Resampler", bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.tight_layout()
 
-    output_folder = general_output_folder + f"visualization_plot/{timestr}-{dataset_name}-bump_chart"
+    output_folder = project_folder + f"visualization_plot/{timestr}-{dataset_name}-bump_chart"
     os.makedirs(output_folder, exist_ok=True)
     plt.savefig(os.path.join(output_folder, f"{dataset_name}_F1_Scores_Weight_Influence.png"))
     plt.show()

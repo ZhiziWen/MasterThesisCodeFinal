@@ -3,10 +3,10 @@ This file calculates the mean and standard deviation of the metrics in the metri
 """
 
 import pandas as pd
-from config import timestr, general_output_folder
+from config import timestr, project_folder
 
 # Load the dataset
-file_path = general_output_folder + 'metrics_report/report_Sepsis 1_20240331-2356.xlsx'
+file_path = project_folder + 'metrics_report/report_Sepsis 1_20240331-2356.xlsx'
 df = pd.read_excel(file_path, sheet_name='Original Data')
 dataset_name = "Sepsis 1" # options: Sepsis 1, Sepsis 2, BPIC2012
 
@@ -35,6 +35,6 @@ for col in grouped_mean.columns:
 combined_stats_adjacent = combined_stats_adjacent.reindex(columns=columns_ordered)
 
 # Save to a new Excel sheet
-output_path_bpic2012_adjusted = general_output_folder + f'metrics_report/combined_stats_{dataset_name}.xlsx'
+output_path_bpic2012_adjusted = project_folder + f'metrics_report/combined_stats_{dataset_name}.xlsx'
 with pd.ExcelWriter(output_path_bpic2012_adjusted, engine='openpyxl') as writer:
     combined_stats_adjacent.to_excel(writer, sheet_name='Sheet1')

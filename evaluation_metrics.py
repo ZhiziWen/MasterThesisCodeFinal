@@ -3,7 +3,7 @@ This file calculates the evaluation metrics used in the experiments and save it 
 """
 
 import pandas as pd
-from config import timestr, general_output_folder
+from config import timestr, project_folder
 
 def create_excel_report(results, accuracys, AUCs, time_report_all, filename='output_metrics.xlsx'):
     """
@@ -48,7 +48,7 @@ def create_excel_report(results, accuracys, AUCs, time_report_all, filename='out
     df_sheet2 = pd.DataFrame(data_sheet2, columns=['Method', 'Label', 'Precision', 'Recall', 'F1-Score', 'Support', 'Average Accuracy', 'Average AUC', 'Average Training Time'])
 
     # Writing to Excel
-    out_path = general_output_folder + f'metrics_report/{filename}_{timestr}.xlsx'
+    out_path = project_folder + f'metrics_report/{filename}_{timestr}.xlsx'
 
     with pd.ExcelWriter(out_path, engine='openpyxl') as writer:
         df_sheet1.to_excel(writer, sheet_name='Original Data', index=False)

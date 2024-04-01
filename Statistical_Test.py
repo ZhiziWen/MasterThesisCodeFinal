@@ -7,7 +7,7 @@ If the Friedman test shows that there is a difference, the perform_posthoc_test 
 import pandas as pd
 from scipy.stats import friedmanchisquare
 import scikit_posthocs as sp
-from config import general_output_folder
+from config import project_folder
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_colwidth', None)
@@ -125,7 +125,7 @@ def evaluate_methods(posthoc_results, df, alpha=0.05):
 # report_Sepsis 2_20240331-2358
 # report_BPIC2012_20240401-0008
 
-file_path = general_output_folder + 'metrics_report/report_Sepsis 1_20240331-2356' \
+file_path = project_folder + 'metrics_report/report_Sepsis 1_20240331-2356' \
             '.xlsx'
 sheet_name = 'Original Data'
 df = pd.read_excel(file_path, sheet_name=sheet_name)

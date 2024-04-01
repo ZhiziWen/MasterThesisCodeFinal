@@ -8,7 +8,7 @@ Note: the generated data is not the original data, but prefix selected and aggre
 import pandas as pd
 from Preprocess_dataframe import prefix_selection, encoding, add_label
 from resampling_and_classification import resampling_techniques
-from config import general_output_folder
+from config import project_folder
 import os
 
 
@@ -35,9 +35,9 @@ X_train = selected_rows.drop('label', axis=1)
 y_train = selected_rows['label']
 
 # Output the example resampled data
-output_path = general_output_folder + 'example_generated_data/example_generated.xlsx'
-if not os.path.exists(general_output_folder + 'example_generated_data'):
-    os.makedirs(general_output_folder + 'example_generated_data')
+output_path = project_folder + 'example_generated_data/example_generated.xlsx'
+if not os.path.exists(project_folder + 'example_generated_data'):
+    os.makedirs(project_folder + 'example_generated_data')
 
 with pd.ExcelWriter(output_path, engine='openpyxl') as writer:
     for resampler_name, resampler in resampling_techniques.items():
