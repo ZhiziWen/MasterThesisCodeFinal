@@ -6,11 +6,24 @@ from AggregateTransformer import AggregateTransformer
 
 
 def prefix_selection(df, n):
+    """
+    Selects the first n events for each case in the dataframe.
+    :param df: The dataframe to be truncated.
+    :param n: The number of events to keep for each case.
+    :return: The truncated dataframe.
+    """
     filtered_df = df.groupby("Case ID").filter(lambda x: len(x) >= n)
     return filtered_df.groupby("Case ID").apply(lambda x: x.head(n)).reset_index(drop=True)
 
 
 def encoding(df, dataset="sepsis"):
+    """
+    Encodes the dataframe using the AggregateTransformer.
+    :param df: The dataframe to be encoded.
+    :param dataset: The dataset name.
+    :return: The encoded dataframe.
+    """
+
     # Aggregation encoding
     if "Sepsis" in dataset:
         dynamic_cat_cols = ["Activity", 'org:group']  # i.e. event attributes
@@ -47,6 +60,13 @@ def encoding(df, dataset="sepsis"):
 
 
 def add_label(original_df, transformed_df):
+    """
+    Adds the label to the transformed dataframe.
+    :param original_df: The original dataframe.
+    :param transformed_df: The transformed dataframe.
+    :return: The transformed dataframe with the label.
+    """
+
     unique_case_ids = transformed_df.index.unique()
     case_id_to_label = original_df.drop_duplicates(subset='Case ID').set_index('Case ID')['label']
     labels_for_trunc_df = unique_case_ids.map(case_id_to_label)
