@@ -1,5 +1,6 @@
 """
 This file calculates the mean and standard deviation of the metrics in the metrics report file.
+The result is stored in a new Excel file.
 """
 
 import pandas as pd
