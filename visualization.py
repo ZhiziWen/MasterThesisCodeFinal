@@ -236,6 +236,6 @@ def create_bump_chart(metrics_name, metrics_scores, dataset_name):
 
     output_folder = project_folder + f"visualization_plot/{timestr}-{dataset_name}-bump_chart"
     os.makedirs(output_folder, exist_ok=True)
-    plt.savefig(os.path.join(output_folder, f"{dataset_name}_F1_Scores_Weight_Influence.png"))
+    plt.savefig(os.path.join(output_folder, f"{dataset_name}_{metrics_name}_Weight_Influence.png"))
     plt.show()
     plt.close()
