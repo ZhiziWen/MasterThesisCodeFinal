@@ -1,4 +1,4 @@
-'''
+"""
 This file contains the visualization functions used in the experiments.
 It contains the following functions:
 1. create_bar_charts: Create separate bar charts for each metric: Precision, Recall, F1-Score, Accuracy, AUC
@@ -6,7 +6,7 @@ It contains the following functions:
     Different background colors are used for baseline, oversampling, undersampling and hybrid sampling methods.
 2. plot_distribution: plot distribution of a column in a DataFrame.
 3. create_bump_chart: Create a bump chart to visualize the rank of each resampling techniques.
-'''
+"""
 
 import pandas as pd
 import matplotlib.pyplot as plt

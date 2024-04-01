@@ -1,6 +1,6 @@
-'''
+"""
 This file contains the global variables for the project.
-'''
+"""
 
 
 import time

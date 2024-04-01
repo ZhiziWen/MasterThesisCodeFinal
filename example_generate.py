@@ -1,9 +1,9 @@
-'''
+"""
 This file generated examples of resampling-techniques-generated data
 It uses an example dataset with 5 cases of label 1 and 10 cases of label 0.
 The output is an excel file with the resampled data for each resampling technique.
 Note: the generated data is not the original data, but prefix selected and aggregated data which is used in training.
-'''
+"""
 
 import pandas as pd
 from Preprocess_dataframe import prefix_selection, encoding, add_label

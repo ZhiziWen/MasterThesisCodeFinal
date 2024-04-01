@@ -1,7 +1,7 @@
-'''
+"""
 Description: This file is the main file for the project.
 It preprocesses the data, resamples the data, trains the model and evaluates the model.
-'''
+"""
 
 import pandas as pd
 import time
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     logging.info(f"Preprocessing starts.")
 
     # Load dataframe
-    data_path = 'data/sepsis_cases_2.csv' # options: sepsis_cases_1.csv, sepsis_cases_2.csv, bpic2012_O_DECLINED-COMPLETE.csv
+    data_path = 'data/bpic2012_O_DECLINED-COMPLETE.csv' # options: sepsis_cases_1.csv, sepsis_cases_2.csv, bpic2012_O_DECLINED-COMPLETE.csv
     df = pd.read_csv(data_path, sep=';')
 
     # Prefix selection
@@ -32,8 +32,8 @@ if __name__ == "__main__":
     encoded_df = prefix_selection(df, n)
 
     # Encoding, available options: agg, static
-    dataset_name = "Sepsis 2" # options: Sepsis 1, Sepsis 2, BPIC2012
-    transformed_df = encoding(encoded_df, encoding_method="agg", dataset=dataset_name)
+    dataset_name = "BPIC2012" # options: Sepsis 1, Sepsis 2, BPIC2012
+    transformed_df = encoding(encoded_df, dataset=dataset_name)
 
     # add label to each case
     transformed_df = add_label(df, transformed_df)

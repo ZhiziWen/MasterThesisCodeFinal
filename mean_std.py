@@ -1,6 +1,6 @@
-'''
+"""
 This file calculates the mean and standard deviation of the metrics in the metrics report file.
-'''
+"""
 
 import pandas as pd
 from config import timestr, general_output_folder

@@ -1,8 +1,8 @@
-'''
+"""
 This file contains the resampling techniques used in the experiments.
 resampling_techniques is a dictionary that contains the resampling techniques used with default weight (50:50 after resampling).
 create_resamplers is a function that adjusts resampling techniques to achieve a specified percentage of the minority class after resampling
-'''
+"""
 
 from imblearn.over_sampling import RandomOverSampler, SMOTE, BorderlineSMOTE, ADASYN
 from imblearn.under_sampling import RandomUnderSampler, AllKNN, CondensedNearestNeighbour, EditedNearestNeighbours, RepeatedEditedNearestNeighbours, TomekLinks, InstanceHardnessThreshold, NearMiss, OneSidedSelection

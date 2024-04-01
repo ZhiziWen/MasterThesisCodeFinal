@@ -1,7 +1,7 @@
-'''
+"""
 This file checks the influence of weights in resampling techniques on the performance of the model.
 It creates bump charts to visualize the performance of the model with different weights.
-'''
+"""
 
 import logging
 import time
