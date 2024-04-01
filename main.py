@@ -1,6 +1,7 @@
 """
 Description: This file is the main file for the project.
 It preprocesses the data, resamples the data, trains the model and evaluates the model.
+Run this file to get the resampling techniques comparison results of the project.
 """
 
 import pandas as pd
@@ -24,7 +25,7 @@ if __name__ == "__main__":
     logging.info(f"Preprocessing starts.")
 
     # Load dataframe
-    data_path = 'data/bpic2012_O_DECLINED-COMPLETE.csv' # options: sepsis_cases_1.csv, sepsis_cases_2.csv, bpic2012_O_DECLINED-COMPLETE.csv
+    data_path = 'data/sepsis_cases_1.csv' # options: sepsis_cases_1.csv, sepsis_cases_2.csv, bpic2012_O_DECLINED-COMPLETE.csv
     df = pd.read_csv(data_path, sep=';')
 
     # Prefix selection
@@ -32,10 +33,10 @@ if __name__ == "__main__":
     encoded_df = prefix_selection(df, n)
 
     # Encoding, available options: agg, static
-    dataset_name = "BPIC2012" # options: Sepsis 1, Sepsis 2, BPIC2012
+    dataset_name = "Sepsis 1" # options: Sepsis 1, Sepsis 2, BPIC2012
     transformed_df = encoding(encoded_df, dataset=dataset_name)
 
-    # add label to each case
+    # Add label to each case
     transformed_df = add_label(df, transformed_df)
 
     # Prepare columns for plotting distribution
@@ -49,7 +50,7 @@ if __name__ == "__main__":
 
     logging.info(f"Dataframe preprocessed. ")
 
-    # resample and train data
+    # Resample and train data
     kf = StratifiedKFold(n_splits=5, random_state=0, shuffle=True)
     results = {}
     accuracys ={}
@@ -73,7 +74,7 @@ if __name__ == "__main__":
 
         for train_index, test_index in kf.split(X,y):
 
-            # resample data
+            # Resample data
             start_time = time.time()
 
             X_train, y_train = X.iloc[train_index], y.iloc[train_index]
@@ -90,7 +91,7 @@ if __name__ == "__main__":
 
             logging.info(f"Resampling done with {resampler_name}")
 
-            # train model
+            # Train model
             model = XGBClassifier(random_state = 0)
             model.fit(X_resampled, y_resampled)
 
@@ -99,7 +100,7 @@ if __name__ == "__main__":
             time_report.append(execution_time)
             logging.info("Training done")
 
-            # evaluate model
+            # Evaluate model
             y_pred = model.predict(X_test)
             roc_auc_score(y_test, model.predict_proba(X_test)[:, 1])
 
