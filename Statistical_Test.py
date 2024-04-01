@@ -2,6 +2,8 @@
 This file contains the statistical tests used in the experiments.
 The perform_friedman_test function performs the Friedman test on the specified metrics, so that we know if there is a difference in groups.
 If the Friedman test shows that there is a difference, the perform_posthoc_test function performs the Conover posthoc test to determine which groups are different.
+
+Note: First run main.py to get the metrics_report to use this file.
 """
 
 import pandas as pd
@@ -120,7 +122,7 @@ def evaluate_methods(posthoc_results, df, alpha=0.05):
 
     return 0
 
-# Possible file names:
+# Example file names:
 # report_Sepsis 1_20240331-2356
 # report_Sepsis 2_20240331-2358
 # report_BPIC2012_20240401-0008

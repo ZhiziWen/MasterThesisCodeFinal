@@ -25,14 +25,14 @@ if __name__ == "__main__":
     logging.info(f"Preprocessing starts.")
 
     # Load dataframe
-    data_path = 'data/bpic2012_O_DECLINED-COMPLETE.csv' # options: sepsis_cases_1.csv, sepsis_cases_2.csv, bpic2012_O_DECLINED-COMPLETE.csv
+    data_path = 'data/sepsis_cases_1.csv' # options: sepsis_cases_1.csv, sepsis_cases_2.csv, bpic2012_O_DECLINED-COMPLETE.csv
     df = pd.read_csv(data_path, sep=';')
 
     # Prefix selection
     n = 7
     encoded_df = prefix_selection(df, n)
 
-    dataset_name = "BPIC2012" # options: Sepsis 1, Sepsis 2, BPIC2012
+    dataset_name = "Sepsis 1" # options: Sepsis 1, Sepsis 2, BPIC2012
     transformed_df = encoding(encoded_df, dataset=dataset_name)
 
     # add label to each case
@@ -87,7 +87,7 @@ if __name__ == "__main__":
                     X_resampled, y_resampled = resampler.fit_resample(X_train, y_train)
                 else:
                     X_resampled, y_resampled = X_train, y_train
-                print(y_resampled.value_counts())
+                # print(y_resampled.value_counts())
 
                 # Store resampled DataFrame
                 plot_df = pd.concat([X_resampled, y_resampled], axis=1)
