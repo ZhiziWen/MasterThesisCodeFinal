@@ -19,14 +19,14 @@ filtered_df = df.groupby('Case ID').filter(lambda x: len(x) == 8)
 # Prefix selection
 n = 7
 encoded_df = prefix_selection(df, n)
-encoded_df = encoded_df # it can changed to encoded_df[["Activity", "timesincelastevent", "Case ID"]] for easier understanding
+# encoded_df = encoded_df[["Activity", "timesincelastevent", "Case ID"]] # This code can be used for easier understanding
 
 # Encoding
 dataset_name = "Sepsis 1" # options: Sepsis 1, Sepsis 2, BPIC2012
 transformed_df = encoding(encoded_df, dataset=dataset_name)
 transformed_df = add_label(df, transformed_df)
 
-# Select 5 cases of label 1 and 10 cases of label 0
+# Select 6 cases of label 1 and 12 cases of label 0
 top_5_label_1 = transformed_df[transformed_df['label'] == 1].head(6)
 top_10_label_0 = transformed_df[transformed_df['label'] == 0].head(12)
 selected_rows = pd.concat([top_5_label_1, top_10_label_0])
