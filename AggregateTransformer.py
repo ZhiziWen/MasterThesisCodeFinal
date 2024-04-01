@@ -5,11 +5,10 @@ https://github.com/irhete/predictive-monitoring-benchmark
 """
 
 
-from sklearn.base import TransformerMixin
-import pandas as pd
-import numpy as np
 from time import time
-import sys
+import pandas as pd
+from sklearn.base import TransformerMixin
+
 
 class AggregateTransformer(TransformerMixin):
     
