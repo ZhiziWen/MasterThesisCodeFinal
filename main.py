@@ -44,7 +44,7 @@ if __name__ == "__main__":
                         'Activity_ER Triage', 'Activity_IV Antibiotics', 'Activity_IV Liquid', 'Activity_LacticAcid', 'Activity_Leucocytes',
                         'Activity_Release A', 'Activity_Return ER']
                         # 'Activity_Release B', 'Activity_Release C', 'Activity_Release D', 'Activity_other' are
-                        # not in the datasets any more after prefix selection
+                        # in the original datasets, but not in the datasets any more after prefix selection
 
     plot_distribution(transformed_df, activity_columns, resampler_name="Prefix 7", dataset_name=dataset_name)
 
