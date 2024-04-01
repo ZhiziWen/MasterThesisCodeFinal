@@ -17,7 +17,7 @@ from global_variables import timestr, project_folder
 from warnings import simplefilter
 simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
 
-# Create bar charts for each metric and each label
+
 def create_bar_charts(results, accuracys, AUCs, time_report_all, dataset_name):
     """
     Create separate bar charts for each metric: Precision, Recall, F1-Score, Accuracy, AUC
@@ -135,8 +135,17 @@ def create_bar_charts(results, accuracys, AUCs, time_report_all, dataset_name):
     plt.close()
 
 
-# Function to plot distribution of a column in a DataFrame, currently used for plotting the distribution of Activity
 def plot_distribution(dfs, columns_to_plot, resampler_name, dataset_name):
+    """
+    Plot the distribution of a column in a DataFrame.
+
+    :param dfs: List of pandas DataFrame objects to plot.
+    :param columns_to_plot: List of strings, the columns to plot.
+    :param resampler_name: String, the name of the resampler used.
+    :param dataset_name: String, the name of the dataset.
+    :return: None
+    """
+
     # If dfs is a single DataFrame, wrap it in a list
     if not isinstance(dfs, list):
         dfs = [dfs]
@@ -197,8 +206,16 @@ def plot_distribution(dfs, columns_to_plot, resampler_name, dataset_name):
     plt.close()
 
 
-# Function to create a bump chart of the metrics scores
 def create_bump_chart(metrics_name, metrics_scores, dataset_name):
+    """
+    Create a bump chart of the metrics scores.  The bump chart shows the rank of each resampler for each metric.
+
+    :param metrics_name: String, the names of the metrics.
+    :param metrics_scores: Dictionary, the scores of the metrics.
+    :param dataset_name: String, the name of the dataset.
+    :return: None
+
+    """
     df = pd.DataFrame(metrics_scores).T  # Transpose: weights become rows, resamplers become columns
     ranks = df.rank(axis=1, method='min', ascending=False, na_option='bottom')
     ranks.fillna(len(df.columns) + 1, inplace=True)
