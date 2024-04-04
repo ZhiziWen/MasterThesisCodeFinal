@@ -80,38 +80,38 @@ def evaluate_methods(posthoc_results, df, alpha=0.05):
     """
 
     for method in df['Method'].unique():
-        if method == 'Base':
+        if method == 'Baseline':
             continue
 
         # Criteria for Precision to be significantly better
-        precision_better = posthoc_results['Precision'].loc[method, 'Base'] < alpha and df[df['Method'] == method][
-            'Precision'].mean() > df[df['Method'] == 'Base']['Precision'].mean()
+        precision_better = posthoc_results['Precision'].loc[method, 'Baseline'] < alpha and df[df['Method'] == method][
+            'Precision'].mean() > df[df['Method'] == 'Baseline']['Precision'].mean()
         # Criteria for Recall to be significantly better
-        recall_better = posthoc_results['Recall'].loc[method, 'Base'] < alpha and df[df['Method'] == method][
-            'Recall'].mean() > df[df['Method'] == 'Base']['Recall'].mean()
+        recall_better = posthoc_results['Recall'].loc[method, 'Baseline'] < alpha and df[df['Method'] == method][
+            'Recall'].mean() > df[df['Method'] == 'Baseline']['Recall'].mean()
         # Criteria for F1 to be significantly better
-        f1_better = posthoc_results['F1-Score'].loc[method, 'Base'] < alpha and df[df['Method'] == method][
-            'F1-Score'].mean() > df[df['Method'] == 'Base']['F1-Score'].mean()
+        f1_better = posthoc_results['F1-Score'].loc[method, 'Baseline'] < alpha and df[df['Method'] == method][
+            'F1-Score'].mean() > df[df['Method'] == 'Baseline']['F1-Score'].mean()
         # Criteria for AUC to be significantly better
-        AUC_better = posthoc_results['AUC'].loc[method, 'Base'] < alpha and df[df['Method'] == method][
-            'AUC'].mean() > df[df['Method'] == 'Base']['AUC'].mean()
-        TrainingTime_better = posthoc_results['Training Time'].loc[method, 'Base'] < alpha and df[df['Method'] == method][
-            'Training Time'].mean() < df[df['Method'] == 'Base']['Training Time'].mean()
+        AUC_better = posthoc_results['AUC'].loc[method, 'Baseline'] < alpha and df[df['Method'] == method][
+            'AUC'].mean() > df[df['Method'] == 'Baseline']['AUC'].mean()
+        TrainingTime_better = posthoc_results['Training Time'].loc[method, 'Baseline'] < alpha and df[df['Method'] == method][
+            'Training Time'].mean() < df[df['Method'] == 'Baseline']['Training Time'].mean()
 
         # Criteria for Precision to be significantly worse
-        precision_worse = posthoc_results['Precision'].loc[method, 'Base'] < alpha and df[df['Method'] == method][
-            'Precision'].mean() < df[df['Method'] == 'Base']['Precision'].mean()
+        precision_worse = posthoc_results['Precision'].loc[method, 'Baseline'] < alpha and df[df['Method'] == method][
+            'Precision'].mean() < df[df['Method'] == 'Baseline']['Precision'].mean()
         # Criteria for Recall to be significantly worse
-        recall_worse = posthoc_results['Recall'].loc[method, 'Base'] < alpha and df[df['Method'] == method][
-            'Recall'].mean() < df[df['Method'] == 'Base']['Recall'].mean()
+        recall_worse = posthoc_results['Recall'].loc[method, 'Baseline'] < alpha and df[df['Method'] == method][
+            'Recall'].mean() < df[df['Method'] == 'Baseline']['Recall'].mean()
         # Criteria for F1 to be significantly worse
-        f1_worse = posthoc_results['F1-Score'].loc[method, 'Base'] < alpha and df[df['Method'] == method][
-            'F1-Score'].mean() < df[df['Method'] == 'Base']['F1-Score'].mean()
+        f1_worse = posthoc_results['F1-Score'].loc[method, 'Baseline'] < alpha and df[df['Method'] == method][
+            'F1-Score'].mean() < df[df['Method'] == 'Baseline']['F1-Score'].mean()
         # Criteria for AUC to be significantly worse
-        AUC_worse = posthoc_results['AUC'].loc[method, 'Base'] < alpha and df[df['Method'] == method][
-            'AUC'].mean() < df[df['Method'] == 'Base']['AUC'].mean()
-        TrainingTime_worse = posthoc_results['Training Time'].loc[method, 'Base'] < alpha and df[df['Method'] == method][
-            'Training Time'].mean() > df[df['Method'] == 'Base']['Training Time'].mean()
+        AUC_worse = posthoc_results['AUC'].loc[method, 'Baseline'] < alpha and df[df['Method'] == method][
+            'AUC'].mean() < df[df['Method'] == 'Baseline']['AUC'].mean()
+        TrainingTime_worse = posthoc_results['Training Time'].loc[method, 'Baseline'] < alpha and df[df['Method'] == method][
+            'Training Time'].mean() > df[df['Method'] == 'Baseline']['Training Time'].mean()
 
         print("_" * 50)
         print(method)
@@ -127,7 +127,7 @@ def evaluate_methods(posthoc_results, df, alpha=0.05):
 # report_Sepsis 2_20240331-2358
 # report_BPIC2012_20240401-0008
 
-file_path = project_folder + 'metrics_report/report_Sepsis 1_20240331-2356' \
+file_path = project_folder + 'metrics_report/report_BPIC2012_20240404-1454' \
             '.xlsx'
 sheet_name = 'Original Data'
 df = pd.read_excel(file_path, sheet_name=sheet_name)
