@@ -10,7 +10,7 @@ from imblearn.combine import SMOTEENN, SMOTETomek
 from imblearn.under_sampling import NeighbourhoodCleaningRule
 
 resampling_techniques = {
-        "Base": None,
+        "Baseline": None,
         "RO": RandomOverSampler(random_state=0),
         "SM": SMOTE(random_state=0),
         "BS": BorderlineSMOTE(random_state=0),
@@ -52,7 +52,7 @@ def create_resamplers(weight, total_majority, total_minority):
         undersampling_strategy = 'auto'
 
     resampling_techniques = {
-        "Base": None,
+        "Baseline": None,
         "RO": RandomOverSampler(sampling_strategy=oversampling_strategy,random_state= 0),
         "SM": SMOTE(sampling_strategy=oversampling_strategy, random_state=0),
         "BS": BorderlineSMOTE(sampling_strategy=oversampling_strategy, random_state=0),
