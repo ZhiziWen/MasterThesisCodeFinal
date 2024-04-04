@@ -76,7 +76,7 @@ def create_bar_charts(results, accuracys, AUCs, time_report_all, dataset_name):
 
         # Plotting charts for label '0' and '1'
         for label_df, label in [(df[df['Label'] == '0'], '0'), (df[df['Label'] == '1'], '1')]:
-            label_text = "regular" if label == '0' else "deviant"
+            label_text = "Regular" if label == '0' else "Deviant"
             plt.figure(figsize=(12, 7))
             ax = label_df.groupby('Method').mean()[metric].plot(kind='bar')
 
@@ -89,7 +89,7 @@ def create_bar_charts(results, accuracys, AUCs, time_report_all, dataset_name):
 
             plt.ylabel("Mean " + metric, fontsize=12)
             plt.xlabel("Resampling Techniques", fontsize=12)
-            plt.xticks(rotation=45)
+            plt.xticks(rotation=0)
 
             for p in ax.patches:
                 ax.annotate(f"{p.get_height():.2f}", (p.get_x() + p.get_width() / 2., p.get_height()),
@@ -120,7 +120,7 @@ def create_bar_charts(results, accuracys, AUCs, time_report_all, dataset_name):
 
     plt.title(f'Mean Resampling and Training Time - {dataset_name} Dataset', fontsize=12)
     plt.ylabel('Time (seconds)', fontsize=12)
-    plt.xticks(rotation=45)
+    plt.xticks(rotation=0)
     plt.legend(handles=legend_patches, loc='upper left', bbox_to_anchor=(1, 0.5), fontsize=12)
     plt.subplots_adjust(right=0.8)
 
