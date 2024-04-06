@@ -17,12 +17,12 @@ resampling_techniques = {
         "AD": ADASYN(random_state=0),
         "RU": RandomUnderSampler(random_state=0),
         "NM": NearMiss(version=1),
+        "IH": InstanceHardnessThreshold(random_state=0),
         "CN": CondensedNearestNeighbour(random_state=0),
         "AL": AllKNN(),
         "EN": EditedNearestNeighbours(),
         "RE": RepeatedEditedNearestNeighbours(),
         "TM": TomekLinks(),
-        "IH": InstanceHardnessThreshold(random_state=0),
         "OS": OneSidedSelection(random_state=0),
         "NC": NeighbourhoodCleaningRule(),
         "SE": SMOTEENN(random_state=0),
@@ -59,12 +59,12 @@ def create_resamplers(weight, total_majority, total_minority):
         "AD": ADASYN(sampling_strategy=oversampling_strategy, random_state=0),
         "RU": RandomUnderSampler(sampling_strategy=undersampling_strategy, random_state=0),
         "NM": NearMiss(version=1, sampling_strategy=undersampling_strategy),
+        "IH": InstanceHardnessThreshold(sampling_strategy=undersampling_strategy, random_state=0),
         "CN": CondensedNearestNeighbour(random_state=0), # No sampling_strategy for cleaning methods
         "AL": AllKNN(), # No sampling_strategy for cleaning methods
         "EN": EditedNearestNeighbours(), # No sampling_strategy for cleaning methods
         "RE": RepeatedEditedNearestNeighbours(), # No sampling_strategy for cleaning methods
         "TM": TomekLinks(), # No sampling_strategy for cleaning methods
-        "IH": InstanceHardnessThreshold(sampling_strategy=undersampling_strategy, random_state=0),
         "OS": OneSidedSelection(random_state=0), # No sampling_strategy for cleaning methods
         "NC": NeighbourhoodCleaningRule(), # No sampling_strategy for cleaning methods
         "SE": SMOTEENN(sampling_strategy=oversampling_strategy, random_state=0),
