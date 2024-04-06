@@ -195,9 +195,9 @@ def plot_distribution(dfs, columns_to_plot, resampler_name, dataset_name):
 
 
     plt.xlabel('Activity Names', fontsize = 14)
-    plt.ylabel('Share of activities happening', fontsize = 14)
-    plt.title(f'Share of activities by label - {dataset_name} - {resampler_name}',  fontsize = 14)
-    plt.xticks(index + bar_width / 2, x_axis_labels, rotation=45, ha='right')
+    plt.ylabel('Share of Activities Happened', fontsize = 14)
+    plt.title(f'Share of Activities By Label - {dataset_name} - {resampler_name}',  fontsize = 14)
+    plt.xticks(index + bar_width / 2, x_axis_labels, rotation=45, ha='right', fontsize = 14)
     plt.legend(loc='upper left', bbox_to_anchor=(1, 1), fontsize=14)
     plt.tight_layout()
 
